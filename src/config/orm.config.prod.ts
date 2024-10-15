@@ -3,7 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Event } from 'src/events/event.entity';
 
 export default registerAs(
-    'orm.config',
+    'orm.config.prod',
     (): TypeOrmModuleOptions => ({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -12,6 +12,6 @@ export default registerAs(
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [Event],
-      synchronize: true,
+      synchronize: false,
     })
   );

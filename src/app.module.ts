@@ -7,6 +7,7 @@ import ormConfig from './config/orm.config';
 import { EventsModule } from './events/events.module';
 import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
+import ormConfigProd from './config/orm.config.prod';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { AppJapanService } from './app.japan.service';
       envFilePath: `dev.env`,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: ormConfig,
+      useFactory:
+        process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd,
     }),
     EventsModule,
   ],
