@@ -10,12 +10,14 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateEventDto } from 'src/dto/create-event.dto';
-import { UpdateEventDto } from 'src/dto/update-event.dto';
+import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
+import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
 import { EventsService } from './events.service';
 import { NotFoundError } from 'rxjs';
+import { ListEvents } from './input/list.events';
 
 @Controller('/events')
 export class EventsController {
@@ -23,9 +25,10 @@ export class EventsController {
 
   constructor(private readonly eventsService: EventsService) {}
   @Get()
-  async findAll() {
+  async findAll(@Query() filter: ListEvents) {
     this.logger.log(`findAll route`);
-    const events = await this.eventsService.findAll();
+    this.logger.debug(filter);
+    const events = await this.eventsService.getEventsWithAttendeeCountFiltered(filter);
     this.logger.debug(`Found ${events.length} events`);
     return events;
   }

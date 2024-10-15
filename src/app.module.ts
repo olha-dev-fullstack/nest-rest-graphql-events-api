@@ -9,7 +9,6 @@ import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
 import { AttendeeModule } from './attendee/attendee.module';
 import ormConfigProd from './config/orm.config.prod';
-import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
