@@ -7,7 +7,9 @@ import ormConfig from './config/orm.config';
 import { EventsModule } from './events/events.module';
 import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
+import { AttendeeModule } from './attendee/attendee.module';
 import ormConfigProd from './config/orm.config.prod';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import ormConfigProd from './config/orm.config.prod';
         process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd,
     }),
     EventsModule,
+    AttendeeModule,
   ],
   controllers: [AppController],
   providers: [
@@ -38,7 +41,7 @@ import ormConfigProd from './config/orm.config.prod';
       inject: [AppDummy],
       useFactory: (app) => `${app.dummy()} factory!`,
     },
-    AppDummy,
+    AppDummy, 
   ],
 })
 export class AppModule {}

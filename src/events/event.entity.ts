@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Attendee } from 'src/attendee/attendee.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('events')
 export class Event {
@@ -12,4 +13,6 @@ export class Event {
   when: Date;
   @Column()
   address: string;
+  @OneToMany(() => Attendee, (attendee) => attendee.event)
+  attendees: Attendee[];
 }

@@ -17,7 +17,7 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({ where: { id }, relations: ['attendees'] });
   }
 
   async create(input: CreateEventDto): Promise<Event> {
