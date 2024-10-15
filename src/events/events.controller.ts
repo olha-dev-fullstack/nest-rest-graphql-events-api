@@ -10,20 +10,33 @@ import {
 } from '@nestjs/common';
 import { CreateEventDto } from 'src/dto/create-event.dto';
 import { UpdateEventDto } from 'src/dto/update-event.dto';
+import { EventsService } from './events.service';
 
 @Controller('/events')
 export class EventsController {
+  constructor(private readonly eventsService: EventsService) {}
   @Get()
-  findAll() {}
-  @Get(':id')
-  findOne(@Param('id') id: string) {}
-  @Post()
-  create(@Body() input: CreateEventDto) {}
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() input: UpdateEventDto) {
-    input
+  async findAll() {
+    return this.eventsService.findAll();
   }
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.eventsService.findOne(id);
+  }
+
+  @Post()
+  async create(@Body() input: CreateEventDto) {
+    return this.eventsService.create(input);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() input: UpdateEventDto) {
+    return this.eventsService.update(id, input);
+  }
+
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {}
+  async remove(@Param('id') id: string) {
+    return this.eventsService.remove(id);
+  }
 }
