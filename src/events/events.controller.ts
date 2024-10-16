@@ -64,10 +64,9 @@ export class EventsController {
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-    const event = await this.eventsService.findOne(id);
-    if (!event) {
+    const result = await this.eventsService.deleteEvent(id);
+    if (result?.affected !== 1) {
       throw new NotFoundException();
     }
-    return this.eventsService.remove(id);
   }
 }

@@ -8,6 +8,7 @@ import { EventsModule } from './events/events.module';
 import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
 import { AttendeeModule } from './attendee/attendee.module';
+import { AuthModule } from './auth/auth.module';
 import ormConfigProd from './config/orm.config.prod';
 
 @Module({
@@ -24,6 +25,7 @@ import ormConfigProd from './config/orm.config.prod';
     }),
     EventsModule,
     AttendeeModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
