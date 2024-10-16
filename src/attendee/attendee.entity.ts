@@ -9,10 +9,10 @@ import {
 } from 'typeorm';
 
 export enum AttendeeAnswerEnum {
-    Accepted = 1,
-    Maybe,
-    Rejected
-  }
+  Accepted = 1,
+  Maybe,
+  Rejected,
+}
 
 @Entity()
 export class Attendee {
@@ -27,7 +27,7 @@ export class Attendee {
 
   @Column('enum', {
     enum: AttendeeAnswerEnum,
-    default: AttendeeAnswerEnum.Accepted
+    default: AttendeeAnswerEnum.Accepted,
   })
   answer: AttendeeAnswerEnum;
 

@@ -9,6 +9,8 @@ import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
 import { AttendeeModule } from './attendee/attendee.module';
 import { AuthModule } from './auth/auth.module';
+import { UserService } from './user/user.service';
+import { UserModule } from './user/user.module';
 import ormConfigProd from './config/orm.config.prod';
 
 @Module({
@@ -26,6 +28,7 @@ import ormConfigProd from './config/orm.config.prod';
     EventsModule,
     AttendeeModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -42,7 +45,7 @@ import ormConfigProd from './config/orm.config.prod';
       inject: [AppDummy],
       useFactory: (app) => `${app.dummy()} factory!`,
     },
-    AppDummy, 
+    AppDummy,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { Event } from './event.entity';
@@ -7,6 +11,7 @@ import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
 import { AttendeeAnswerEnum } from 'src/attendee/attendee.entity';
 import { ListEvents, WhenEventFilter } from './input/list.events';
 import { paginate, PaginateOptions } from 'src/pagination/paginator';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class EventsService {
@@ -100,23 +105,39 @@ export class EventsService {
     return this.repository.find();
   }
 
-  async findOne(id: string) {
+  async getEvent(id: string) {
     const query = this.getEventWithAttendeeCountQuery().andWhere('e.id = :id', {
       id,
     });
-    // return this.repository.findOne({ where: { id }, relations: ['attendees'] });
+    // return this.repository.getEvent({ where: { id }, relations: ['attendees'] });
     return query.getOne();
   }
 
-  async create(input: CreateEventDto): Promise<Event> {
+  async createEvent(input: CreateEventDto, user: User): Promise<Event> {
     return this.repository.save({
       ...input,
+      organizer: user,
       when: new Date(input.when),
     });
   }
 
-  async update(id: string, input: UpdateEventDto): Promise<Event> {
-    const eventToUpdate = await this.findOne(id);
+  async updateEvent(
+    id: string,
+    input: UpdateEventDto,
+    user: User,
+  ): Promise<Event> {
+    const eventToUpdate = await this.getEvent(id);
+
+    if (!eventToUpdate) {
+      throw new NotFoundException(`Event not with id ${id} found`);
+    }
+
+    if (eventToUpdate.organizerId !== user.id) {
+      throw new ForbiddenException(
+        null,
+        'User is not authorized to update this event',
+      );
+    }
     const newEvent = {
       ...eventToUpdate,
       ...input,
@@ -125,7 +146,20 @@ export class EventsService {
     return this.repository.save(newEvent);
   }
 
-  async deleteEvent(id: string): Promise<DeleteResult> {
+  async deleteEvent(id: string, user: User): Promise<DeleteResult> {
+    const eventToDelete = await this.getEvent(id);
+
+    if (!eventToDelete) {
+      throw new NotFoundException(`Event not with id ${id} found`);
+    }
+
+    if (eventToDelete.organizerId !== user.id) {
+      throw new ForbiddenException(
+        null,
+        'User is not authorized to delete this event',
+      );
+    }
+
     return await this.repository
       .createQueryBuilder('e')
       .delete()

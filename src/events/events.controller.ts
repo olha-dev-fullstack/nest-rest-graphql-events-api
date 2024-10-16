@@ -11,14 +11,17 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
 import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
 import { EventsService } from './events.service';
-import { NotFoundError } from 'rxjs';
 import { ListEvents } from './input/list.events';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import { User } from 'src/user/user.entity';
+import { AuthGuardJwt } from 'src/auth/guards/auth-guard.jwt';
 
 @Controller('/events')
 export class EventsController {
@@ -41,7 +44,7 @@ export class EventsController {
   }
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const event = await this.eventsService.findOne(id);
+    const event = await this.eventsService.getEvent(id);
     if (!event) {
       throw new NotFoundException();
     }
@@ -49,22 +52,29 @@ export class EventsController {
   }
 
   @Post()
-  async create(@Body() input: CreateEventDto) {
-    return this.eventsService.create(input);
+  @UseGuards(AuthGuardJwt)
+  async create(@CurrentUser() user: User, @Body() input: CreateEventDto) {
+    return this.eventsService.createEvent(input, user);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuardJwt)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateEventDto,
+    @CurrentUser() user: User,
   ) {
-    return this.eventsService.update(id, input);
+    return this.eventsService.updateEvent(id, input, user);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    const result = await this.eventsService.deleteEvent(id);
+  @UseGuards(AuthGuardJwt)
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    const result = await this.eventsService.deleteEvent(id, user);
     if (result?.affected !== 1) {
       throw new NotFoundException();
     }
