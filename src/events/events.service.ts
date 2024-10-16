@@ -6,6 +6,7 @@ import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
 import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
 import { AttendeeAnswerEnum } from 'src/attendee/attendee.entity';
 import { ListEvents, WhenEventFilter } from './input/list.events';
+import { paginate, PaginateOptions } from 'src/pagination/paginator';
 
 @Injectable()
 export class EventsService {
@@ -61,7 +62,7 @@ export class EventsService {
     let query = this.getEventWithAttendeCountQuery();
 
     if (!filter) {
-      return query.getMany();
+      return query;
     }
 
     if (filter.when) {
@@ -69,14 +70,30 @@ export class EventsService {
         case WhenEventFilter.Today:
           query = query.andWhere('e.when = CURRENT_DATE');
         case WhenEventFilter.Tommorow:
-          query = query.andWhere("DATE_PART('day', e.when) = DATE_PART('day', NOW()) + 1");
+          query = query.andWhere(
+            "DATE_PART('day', e.when) = DATE_PART('day', NOW()) + 1",
+          );
         case WhenEventFilter.ThisWeek:
-          query = query.andWhere("DATE_PART('week', e.when) = DATE_PART('week', NOW())");
+          query = query.andWhere(
+            "DATE_PART('week', e.when) = DATE_PART('week', NOW())",
+          );
         case WhenEventFilter.NextWeek:
-          query = query.andWhere("DATE_PART('week', e.when) + 1 = DATE_PART('week', NOW()) + 1");
+          query = query.andWhere(
+            "DATE_PART('week', e.when) + 1 = DATE_PART('week', NOW()) + 1",
+          );
       }
     }
-    return query.getMany();
+    return query;
+  }
+
+  public async getEventsWithAttendeeCountFilteredPaginated(
+    filter: ListEvents,
+    paginatedOptions: PaginateOptions,
+  ) {
+    return paginate(
+      await this.getEventsWithAttendeeCountFiltered(filter),
+      paginatedOptions,
+    );
   }
 
   async findAll() {

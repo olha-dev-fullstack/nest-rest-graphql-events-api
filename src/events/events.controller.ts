@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
@@ -25,11 +26,17 @@ export class EventsController {
 
   constructor(private readonly eventsService: EventsService) {}
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async findAll(@Query() filter: ListEvents) {
-    this.logger.log(`findAll route`);
-    this.logger.debug(filter);
-    const events = await this.eventsService.getEventsWithAttendeeCountFiltered(filter);
-    this.logger.debug(`Found ${events.length} events`);
+    const events =
+      await this.eventsService.getEventsWithAttendeeCountFilteredPaginated(
+        filter,
+        {
+          total: true,
+          currentPage: filter.page,
+          limit: 2,
+        },
+      );
     return events;
   }
   @Get(':id')
