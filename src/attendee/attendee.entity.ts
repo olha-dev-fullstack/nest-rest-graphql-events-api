@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { Event } from 'src/events/event.entity';
 import {
   Column,
@@ -17,9 +18,11 @@ export enum AttendeeAnswerEnum {
 @Entity()
 export class Attendee {
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   id: number;
 
   @Column()
+  @Expose()
   name: string;
   @ManyToOne(() => Event, (event) => event.attendees, { nullable: false })
   @JoinColumn()
@@ -29,10 +32,6 @@ export class Attendee {
     enum: AttendeeAnswerEnum,
     default: AttendeeAnswerEnum.Accepted,
   })
+  @Expose()
   answer: AttendeeAnswerEnum;
-
-  attendeeCount?: number;
-  attendeeRejected?: number;
-  attendeeMaybe?: number;
-  attendeeAccepted?: number;
 }
