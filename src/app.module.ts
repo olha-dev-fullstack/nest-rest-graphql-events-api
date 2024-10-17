@@ -7,7 +7,7 @@ import ormConfig from './config/orm.config';
 import { EventsModule } from './events/events.module';
 import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
-import { AttendeeModule } from './attendee/attendee.module';
+import { AttendeeModule } from './events/attendee/attendee.module';
 import { AuthModule } from './auth/auth.module';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';

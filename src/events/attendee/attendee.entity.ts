@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { Event } from 'src/events/event.entity';
+import { User } from 'src/user/user.entity';
 import {
   Column,
   Entity,
@@ -24,9 +25,13 @@ export class Attendee {
   @Column()
   @Expose()
   name: string;
+  
   @ManyToOne(() => Event, (event) => event.attendees, { nullable: false })
   @JoinColumn()
   event: Event;
+
+  @Column()
+  eventId: string;
 
   @Column('enum', {
     enum: AttendeeAnswerEnum,
@@ -34,4 +39,10 @@ export class Attendee {
   })
   @Expose()
   answer: AttendeeAnswerEnum;
+  
+  @ManyToOne(() => User, (user) => user.attended)
+  user: User;
+
+  @Column()
+  userId: string;
 }

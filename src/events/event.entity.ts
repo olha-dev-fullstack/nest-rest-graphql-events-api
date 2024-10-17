@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
-import { Attendee } from 'src/attendee/attendee.entity';
+import { Attendee } from 'src/events/attendee/attendee.entity';
+import { PaginationResult } from 'src/pagination/paginator';
 import { User } from 'src/user/user.entity';
 import {
   Column,
@@ -48,3 +49,5 @@ export class Event {
   @Expose()
   attendeeAccepted?: number;
 }
+
+export type PaginatedEvents = PaginationResult<Event>;
