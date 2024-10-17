@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import ormConfig from './config/orm.config';
-import { EventsModule } from './events/events.module';
+import { EventsModule } from './events/event.module';
 import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
 import { AttendeeModule } from './events/attendee/attendee.module';

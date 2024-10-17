@@ -14,12 +14,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { EventsService } from './event.service';
 import { AttendeeService } from './attendee/attendee.service';
 import { CreateAttendeeDto } from './input/dto/create-attendee.dto';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { User } from 'src/user/user.entity';
-import { AuthGuardJwt } from 'src/auth/guards/auth-guard.jwt';
+import { CurrentUser } from './../decorators/current-user.decorator';
+import { User } from './../user/user.entity';
+import { AuthGuardJwt } from './../auth/guards/auth-guard.jwt';
 
 @Controller('events-attendance')
 @UseGuards(AuthGuardJwt)

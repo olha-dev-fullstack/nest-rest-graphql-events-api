@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
-import { Attendee } from 'src/events/attendee/attendee.entity';
-import { PaginationResult } from 'src/pagination/paginator';
-import { User } from 'src/user/user.entity';
+import { Attendee } from './../events/attendee/attendee.entity';
+import { PaginationResult } from './../pagination/paginator';
+import { User } from './../user/user.entity';
 import {
   Column,
   Entity,

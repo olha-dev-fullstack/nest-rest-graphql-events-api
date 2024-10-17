@@ -10,7 +10,7 @@ import {
   SerializeOptions,
   UseInterceptors,
 } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { EventsService } from './event.service';
 @Controller('events-organized-by-user/:userId')
 @SerializeOptions({ strategy: 'excludeAll' })
 export class EventsOrganizedByUserController {

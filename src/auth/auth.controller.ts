@@ -9,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
+import { CurrentUser } from './../decorators/current-user.decorator';
 import { User } from '../user/user.entity';
 import { AuthGuardLocal } from './guards/auth-guard.local';
 import { AuthGuardJwt } from './guards/auth-guard.jwt';

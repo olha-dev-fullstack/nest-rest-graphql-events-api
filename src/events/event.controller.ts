@@ -18,13 +18,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
-import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
-import { EventsService } from './events.service';
+import { CreateEventDto } from './input/dto/create-event.dto';
+import { UpdateEventDto } from './input/dto/update-event.dto';
+import { EventsService } from './event.service';
 import { ListEvents } from './input/list.events';
-import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { User } from 'src/user/user.entity';
-import { AuthGuardJwt } from 'src/auth/guards/auth-guard.jwt';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { User } from '../user/user.entity';
+import { AuthGuardJwt } from '../auth/guards/auth-guard.jwt';
 import { Event, PaginatedEvents } from './event.entity';
 
 @Controller('/events')

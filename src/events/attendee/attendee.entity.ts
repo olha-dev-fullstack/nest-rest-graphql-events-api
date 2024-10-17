@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
-import { Event } from 'src/events/event.entity';
-import { User } from 'src/user/user.entity';
+import { Event } from '../../events/event.entity';
+import { User } from '../../user/user.entity';
 import {
   Column,
   Entity,

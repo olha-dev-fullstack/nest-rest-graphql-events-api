@@ -6,12 +6,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { Event, PaginatedEvents } from './event.entity';
-import { CreateEventDto } from 'src/events/input/dto/create-event.dto';
-import { UpdateEventDto } from 'src/events/input/dto/update-event.dto';
-import { AttendeeAnswerEnum } from 'src/events/attendee/attendee.entity';
+import { CreateEventDto } from './input/dto/create-event.dto';
+import { UpdateEventDto } from './input/dto/update-event.dto';
+import { AttendeeAnswerEnum } from './attendee/attendee.entity';
 import { ListEvents, WhenEventFilter } from './input/list.events';
-import { paginate, PaginateOptions } from 'src/pagination/paginator';
-import { User } from 'src/user/user.entity';
+import { paginate, PaginateOptions } from '../pagination/paginator';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class EventsService {
@@ -62,6 +62,7 @@ export class EventsService {
         'User is not authorized to update this event',
       );
     }
+
     return this.eventRepository.save(
       new Event({
         ...eventToUpdate,
@@ -196,11 +197,6 @@ export class EventsService {
   private getEventsAttendedByUserIdQuery(
     userId: string,
   ): SelectQueryBuilder<Event> {
-    const query = this.getEventBaseQuery()
-      .leftJoinAndSelect('e.attendees', 'a')
-      .where('a.userId = :userId', { userId });
-    console.log(query);
-
     return this.getEventBaseQuery()
       .leftJoinAndSelect('e.attendees', 'a')
       .where('a.userId = :userId', { userId });
