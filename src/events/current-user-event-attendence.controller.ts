@@ -2,9 +2,11 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  DefaultValuePipe,
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Put,
   Query,
@@ -29,14 +31,17 @@ export class CurrentUserEventAttendanceController {
   ) {}
 
   @Get()
-  async findAll(@CurrentUser() user: User, @Query('page') page = 1) {
+  async findAll(
+    @CurrentUser() user: User,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+  ) {
     return this.eventService.getEventsAttendedByUserIdPaginated(user.id, {
       limit: 6,
       currentPage: page,
     });
   }
 
-  @Get('/:eventId')
+  @Get(':eventId')
   @UseInterceptors(ClassSerializerInterceptor)
   async findOne(
     @Param('eventId', ParseUUIDPipe) eventId: string,
@@ -53,7 +58,7 @@ export class CurrentUserEventAttendanceController {
     return attendee;
   }
 
-  @Put('/:eventId')
+  @Put(':eventId')
   @UseInterceptors(ClassSerializerInterceptor)
   async createOrUpdate(
     @Param('eventId', ParseUUIDPipe) eventId: string,

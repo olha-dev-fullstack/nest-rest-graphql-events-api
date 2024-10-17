@@ -25,6 +25,7 @@ import { ListEvents } from './input/list.events';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { User } from 'src/user/user.entity';
 import { AuthGuardJwt } from 'src/auth/guards/auth-guard.jwt';
+import { Event, PaginatedEvents } from './event.entity';
 
 @Controller('/events')
 @SerializeOptions({ strategy: 'excludeAll' })
@@ -36,7 +37,7 @@ export class EventsController {
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll(@Query() filter: ListEvents) {
+  async findAll(@Query() filter: ListEvents): Promise<PaginatedEvents> {
     const events =
       await this.eventsService.getEventsWithAttendeeCountFilteredPaginated(
         filter,
@@ -52,8 +53,8 @@ export class EventsController {
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const event = await this.eventsService.getEvent(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Event> {
+    const event = await this.eventsService.getEventWithAttendeeCount(id);
     if (!event) {
       throw new NotFoundException();
     }
@@ -63,7 +64,10 @@ export class EventsController {
   @Post()
   @UseGuards(AuthGuardJwt)
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@CurrentUser() user: User, @Body() input: CreateEventDto) {
+  async create(
+    @CurrentUser() user: User,
+    @Body() input: CreateEventDto,
+  ): Promise<Event> {
     return this.eventsService.createEvent(input, user);
   }
 
@@ -74,7 +78,7 @@ export class EventsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateEventDto,
     @CurrentUser() user: User,
-  ) {
+  ): Promise<Event> {
     return this.eventsService.updateEvent(id, input, user);
   }
 

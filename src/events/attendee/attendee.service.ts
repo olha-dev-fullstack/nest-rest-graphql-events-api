@@ -30,14 +30,18 @@ export class AttendeeService {
     });
   }
 
-  public async createOrUpdate(input: CreateAttendeeDto, eventId: string, userId: string): Promise<Attendee> {
-    const attendee = await this.findOneByEventIdAndUserId(eventId, userId) ?? new Attendee();
+  public async createOrUpdate(
+    input: CreateAttendeeDto,
+    eventId: string,
+    userId: string,
+  ): Promise<Attendee> {
+    const attendee =
+      (await this.findOneByEventIdAndUserId(eventId, userId)) ?? new Attendee();
 
     attendee.eventId = eventId;
     attendee.userId = userId;
     attendee.answer = input.answer;
 
     return this.attendeeRepository.save(attendee);
-
   }
 }

@@ -1,4 +1,12 @@
-import { ClassSerializerInterceptor, Controller, Get, Param, SerializeOptions, UseInterceptors } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  SerializeOptions,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AttendeeService } from './attendee.service';
 
 @Controller('events/:eventId/attendees')
@@ -6,10 +14,9 @@ import { AttendeeService } from './attendee.service';
 export class AttendeeController {
   constructor(private readonly attendeeService: AttendeeService) {}
 
-
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-    async findAll(@Param('eventId') eventId: string) {
-        return this.attendeeService.findByEventId(eventId)
-    }
+  async findAll(@Param('eventId', ParseUUIDPipe) eventId: string) {
+    return this.attendeeService.findByEventId(eventId);
+  }
 }
