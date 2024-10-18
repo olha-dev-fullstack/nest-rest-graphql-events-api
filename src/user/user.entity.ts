@@ -26,7 +26,7 @@ export class User {
   email: string;
   @Column()
   @Expose()
-  firsName: string;
+  firstName: string;
   @Column()
   @Expose()
   lastName: string;

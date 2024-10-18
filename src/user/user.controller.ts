@@ -30,7 +30,7 @@ export class UserController {
     user.username = createUserDto.username;
     user.password = await this.authService.hashPassword(createUserDto.password);
     user.email = createUserDto.email;
-    user.firsName = createUserDto.firstName;
+    user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
 
     return {
