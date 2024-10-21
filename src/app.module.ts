@@ -9,9 +9,11 @@ import { AppDummy } from './app.dummy';
 import { AppJapanService } from './app.japan.service';
 import { AttendeeModule } from './events/attendee/attendee.module';
 import { AuthModule } from './auth/auth.module';
-import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import ormConfigProd from './config/orm.config.prod';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver,  ApolloDriverConfig } from '@nestjs/apollo';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -25,10 +27,17 @@ import ormConfigProd from './config/orm.config.prod';
       useFactory:
         process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd,
     }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      debug: true,
+      playground: true,
+    }),
     EventsModule,
     AttendeeModule,
     AuthModule,
     UserModule,
+    SchoolModule,
   ],
   controllers: [AppController],
   providers: [
