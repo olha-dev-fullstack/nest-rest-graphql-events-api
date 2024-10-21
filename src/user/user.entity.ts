@@ -10,25 +10,32 @@ import { Profile } from '../auth/profile.entity';
 import { Event } from './../events/event.entity';
 import { Expose } from 'class-transformer';
 import { Attendee } from './../events/attendee/attendee.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity()
+@ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @Expose()
+  @Field()
   id: string;
   @Column({ unique: true })
   @Expose()
+  @Field()
   username: string;
   @Column()
   password: string;
   @Column({ unique: true })
   @Expose()
+  @Field()
   email: string;
   @Column()
   @Expose()
+  @Field()
   firstName: string;
   @Column()
   @Expose()
+  @Field()
   lastName: string;
   @OneToOne(() => Profile)
   @JoinColumn()
