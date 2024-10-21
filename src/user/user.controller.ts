@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { CreateUserDto } from '../auth/input/dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -13,12 +13,6 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = new User();
-
-    if (createUserDto.password !== createUserDto.retypedPassword) {
-      throw new BadRequestException(['Passwords are not identical']);
-    }
-
     const existingUser = await this.userService.getOneByUsernameOrEmail(
       createUserDto.username,
       createUserDto.email,
@@ -27,14 +21,9 @@ export class UserController {
     if (existingUser) {
       throw new BadRequestException(['Username or email already exists']);
     }
-    user.username = createUserDto.username;
-    user.password = await this.authService.hashPassword(createUserDto.password);
-    user.email = createUserDto.email;
-    user.firstName = createUserDto.firstName;
-    user.lastName = createUserDto.lastName;
-
+    const user = await this.userService.create(createUserDto);
     return {
-      ...(await this.userService.saveUser(user)),
+      ...user,
       token: this.authService.getTokenForUser(user),
     };
   }
