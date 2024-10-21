@@ -110,7 +110,7 @@ describe('Events (e2e)', () => {
         address: 'Street 123',
       })
       .expect(201)
-      .then((_) => {
+      .then(() => {
         return request(app.getHttpServer())
           .get('/events/3cec8c71-853a-4fc5-ba44-6758919e005f')
           .expect(200)
@@ -163,7 +163,7 @@ describe('Events (e2e)', () => {
       .delete('/events/3cec8c71-853a-4fc5-ba44-6758919e005f')
       .set('Authorization', `Bearer ${tokenForUser()}`)
       .expect(204)
-      .then((response) => {
+      .then(() => {
         return request(app.getHttpServer())
           .get('/events/3cec8c71-853a-4fc5-ba44-6758919e005f')
           .expect(404);

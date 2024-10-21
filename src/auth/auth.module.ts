@@ -22,7 +22,13 @@ import { UserDoesNotExistConstraint } from './validation/user-does-not-exist.con
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, AuthResolver, UserDoesNotExistConstraint],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    AuthResolver,
+    UserDoesNotExistConstraint,
+  ],
   exports: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

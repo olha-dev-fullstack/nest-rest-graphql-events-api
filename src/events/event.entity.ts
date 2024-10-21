@@ -53,4 +53,4 @@ export class Event {
   attendeeAccepted?: number;
 }
 
-export class PaginatedEvents extends Paginated<Event>(Event) {};
+export class PaginatedEvents extends Paginated<Event>(Event) {}

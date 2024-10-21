@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attendee } from './attendee.entity';
 import { Repository } from 'typeorm';
-import { throws } from 'assert';
 import { CreateAttendeeDto } from '../input/dto/create-attendee.dto';
 
 @Injectable()
