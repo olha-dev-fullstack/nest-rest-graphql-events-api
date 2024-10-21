@@ -7,7 +7,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { User } from 'src/user/user.entity';
+import { User } from '../../user/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
