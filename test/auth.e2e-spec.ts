@@ -6,7 +6,7 @@ import {
   loadFixtures as loadFixturesBase,
   tokenForUser as tokenForUserBase,
 } from './utils';
-import { User } from 'src/user/user.entity';
+import { User } from '../src/user/user.entity';
 import { DataSource } from 'typeorm';
 let app: INestApplication;
 let mod: TestingModule;
