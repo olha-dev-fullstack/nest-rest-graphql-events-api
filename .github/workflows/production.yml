@@ -4,7 +4,7 @@ on:
 jobs:
   checkout:
     runs-on: [self-hosted, prod]
-    environment: prod
+    environment: production
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
   create_env:
     needs: checkout
     runs-on: [self-hosted, prod]
-    environment: prod
+    environment: production
     steps: 
       - name: Create .env file
         run: |
