@@ -1,4 +1,3 @@
-
 # Events API
 
 This is a REST + GraphQL event management API where users can authenticate, create events and mark attendance. The project is built using NestJS, Postgres, JWT, and Passport.js for authentication and authorization.
@@ -48,48 +47,60 @@ docker-compose up -d
 Run the NestJS server:
 
 - watch mode
+
 ```bash
 npm run start:dev
 ```
+
 - dev mode
+
 ```bash
 npm run start
 ```
+
 - production mode
+
 ```bash
 npm run start:prod
 ```
-*Please note that for production it is needed to create `prod.env` file into `src` folder with all configurations as in `dev.env`
+
+\*Please note that for production it is needed to create `prod.env` file into `src` folder with all configurations as in `dev.env`
 
 The API will be available at `http://localhost:3000`.
 
 ## API Endpoints
 
-
 ### REST Endpoints
 
 #### Authentication and Users
+
 - **POST** `/auth/login`: User login (JWT Token generation)
+
 ```json
 {
-    "username": "test",
-    "password": "password"
+  "username": "test",
+  "password": "password"
 }
 ```
+
 - **GET** `/auth/profile`: Get authorized user profile (requires authentication)
 - **POST** `/user`: Register new user
+
 ```json
 {
-    "username": "test",
-    "password": "password",
-    "retypedPassword": "password",
-    "firstName": "John",
-    "lastName": "Smith",
-    "email": "john@gmail.com"
+  "username": "test",
+  "password": "password",
+  "retypedPassword": "password",
+  "firstName": "John",
+  "lastName": "Smith",
+  "email": "john@gmail.com"
 }
 ```
+
 #### Events
+
 - **POST** `/events`: Create a new event (requires authentication)
+
 ```json
 {
   "name": "Interesting Party",
@@ -98,18 +109,23 @@ The API will be available at `http://localhost:3000`.
   "when": "2021-04-15 21:00:00"
 }
 ```
+
 - **GET** `/events`: Get a list of all events
 - **GET** `/events/:id`: Get single event
 - **DELETE** `/events/:id`: Delete an event (requires authentication)
 - **GET** `/events-organized-by-user:id`: Get a list events organized by specific user (requires authentication)
 - **PATCH** `/events/:id`: Update an event (requires authentication)
+
 #### Event Attendance
+
 - **PUT** `/events-attendance/:id`: Mark attendance for an event (requires authentication)
+
 ```json
 {
-    "answer": 1
+  "answer": 1
 }
 ```
+
 - **GET** `/events/:id/attendees` Get List of attendees of specific event
 - **GET** `/events-attendance/:id` Get specific event attendance by current user
 - **GET** `/events-attendance` Get al events to be attended by currenct user
@@ -118,7 +134,7 @@ The API will be available at `http://localhost:3000`.
 
 - Access GraphQL playground at `/graphql`.
 
-*There is Postman collection with all endpoints included in this repo
+\*There is Postman collection with all endpoints included in this repo
 
 ## Authentication and Authorization
 
