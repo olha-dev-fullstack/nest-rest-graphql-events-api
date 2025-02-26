@@ -4,7 +4,7 @@ on:
 jobs:
   checkout:
     runs-on: [self-hosted, prod]
-    environment: dev
+    environment: prod
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -20,19 +20,18 @@ jobs:
   create_env:
     needs: checkout
     runs-on: [self-hosted, prod]
-    environment: dev
+    environment: prod
     steps: 
       - name: Create .env file
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> dev.env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> dev.env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> dev.env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> dev.env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> dev.env
-          echo "DB_DROP_SCHEMA=${{ secrets.DB_DROP_SCHEMA }}" >> dev.env
-          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> dev.env
-          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> dev.env
-          echo "PORT=${{ secrets.PORT }}" >> dev.env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> production.env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> production.env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> production.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> production.env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> production.env
+          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> production.env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> production.env
+          echo "PORT=${{ vars.PORT }}" >> production.env
   build:
     needs: create_env
     runs-on: [self-hosted, prod]
@@ -45,4 +44,4 @@ jobs:
     runs-on: [self-hosted, prod]
     steps:
       - name: Run deployment
-        run: NODE_ENV=dev pm2 restart dist/main.js --name=events-api
+        run: NODE_ENV=production pm2 restart dist/main.js --name=events-api
