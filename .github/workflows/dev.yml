@@ -38,6 +38,7 @@ jobs:
           echo "PORT=${{ secrets.PORT }}" >> dev.env
   test: 
     runs-on: [self-hosted, dev]
+    needs: create_env
     steps:
       - name: Run tests
         run: npm run test
