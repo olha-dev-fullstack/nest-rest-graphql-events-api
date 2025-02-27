@@ -42,7 +42,7 @@ jobs:
           echo "DB_DROP_SCHEMA=${{ secrets.DB_DROP_SCHEMA }}" >> ${{inputs.env_file}}
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> ${{inputs.env_file}}
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> ${{inputs.env_file}}
-          echo "PORT=${{ secrets.PORT }}" >> ${{inputs.env_file}}
+          echo "PORT=${{ vars.PORT }}" >> ${{inputs.env_file}}
   test: 
     runs-on: [self-hosted, "${{inputs.runner}}"]
     needs: create_env
