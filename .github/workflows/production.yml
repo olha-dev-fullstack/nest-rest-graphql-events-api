@@ -24,17 +24,21 @@ jobs:
     steps: 
       - name: Create .env file
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> dev.env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> dev.env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> dev.env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> dev.env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> dev.env
-          echo "DB_DROP_SCHEMA=${{ secrets.DB_DROP_SCHEMA }}" >> dev.env
-          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> dev.env
-          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> dev.env
-          echo "PORT=${{ secrets.PORT }}" >> dev.env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> production.env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> production.env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> production.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> production.env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> production.env
+          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> production.env
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> production.env
+          echo "PORT=${{ vars.PORT }}" >> production.env
+  test: 
+    runs-on: [self-hosted, prod]
+    steps:
+      - name: Run tests
+        run: npm run test  
   build:
-    needs: create_env
+    needs: [create_env, test]
     runs-on: [self-hosted, prod]
     steps:
       - name: Build website
