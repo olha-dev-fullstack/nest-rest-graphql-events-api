@@ -11,9 +11,9 @@ on:
             env_file:
                 type: string
                 required: true
-            port:
-                type: string
-                required: true
+            # port:
+            #     type: string
+            #     required: true
 jobs:
   checkout:
     runs-on: [self-hosted, "${{inputs.runner}}"]
@@ -35,7 +35,7 @@ jobs:
     runs-on: [self-hosted, "${{inputs.runner}}"]
     steps: 
         - run: |
-            echo "port: ${{inputs.port}}"
+            echo "port: ${{vars.PORT}}"
   create_env:
     needs: check_port
     runs-on: [self-hosted, "${{inputs.runner}}"]
@@ -51,7 +51,7 @@ jobs:
           echo "DB_DROP_SCHEMA=${{ secrets.DB_DROP_SCHEMA }}" >> ${{inputs.env_file}}
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> ${{inputs.env_file}}
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> ${{inputs.env_file}}
-          echo "PORT=${{ inputs.port }}" >> ${{inputs.env_file}}
+          echo "PORT=${{ vars.PORT }}" >> ${{inputs.env_file}}
   test: 
     runs-on: [self-hosted, "${{inputs.runner}}"]
     needs: create_env
