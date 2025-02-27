@@ -30,8 +30,14 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
+  check_port:
+    needs: checkout 
+    runs-on: [self-hosted, "${{inputs.runner}}"]
+    steps: 
+        - run: |
+            echo "port: ${{inputs.port}}"
   create_env:
-    needs: checkout
+    needs: check_port
     runs-on: [self-hosted, "${{inputs.runner}}"]
     environment: ${{inputs.environment}}
     steps: 
