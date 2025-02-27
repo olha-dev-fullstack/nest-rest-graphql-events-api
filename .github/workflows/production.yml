@@ -2,51 +2,10 @@ name: Production deployment
 on:
   workflow_dispatch:
 jobs:
-  checkout:
-    runs-on: [self-hosted, prod]
-    environment: production
-    steps:
-      - name: Get code
-        uses: actions/checkout@v4
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
-  create_env:
-    needs: checkout
-    runs-on: [self-hosted, prod]
-    environment: production
-    steps: 
-      - name: Create .env file
-        run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> production.env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> production.env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> production.env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> production.env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> production.env
-          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> production.env
-          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> production.env
-          echo "PORT=${{ vars.PORT }}" >> production.env
-  test: 
-    runs-on: [self-hosted, prod]
-    steps:
-      - name: Run tests
-        run: npm run test  
-  build:
-    needs: [create_env, test]
-    runs-on: [self-hosted, prod]
-    steps:
-      - name: Build website
-        id: build-website
-        run: npm run build
-  deploy:
-    needs: build
-    runs-on: [self-hosted, prod]
-    steps:
-      - name: Run deployment
-        run: NODE_ENV=production pm2 restart dist/main.js --name=events-api
+  run-deployment:
+    uses: ./.github/workflows/deployment.yml
+    with:
+      environment: "production"
+      runner: "prod"
+      env_file: "production.env"
+    secrets: inherit
