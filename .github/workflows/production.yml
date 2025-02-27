@@ -32,8 +32,13 @@ jobs:
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> production.env
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> production.env
           echo "PORT=${{ vars.PORT }}" >> production.env
+  test: 
+    runs-on: [self-hosted, prod]
+    steps:
+      - name: Run tests
+        run: npm run test  
   build:
-    needs: create_env
+    needs: [create_env, test]
     runs-on: [self-hosted, prod]
     steps:
       - name: Build website

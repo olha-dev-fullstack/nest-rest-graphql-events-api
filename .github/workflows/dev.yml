@@ -36,8 +36,14 @@ jobs:
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> dev.env
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> dev.env
           echo "PORT=${{ secrets.PORT }}" >> dev.env
-  build:
+  test: 
+    runs-on: [self-hosted, dev]
     needs: create_env
+    steps:
+      - name: Run tests
+        run: npm run test
+  build:
+    needs: [create_env, test]
     runs-on: [self-hosted, dev]
     steps:
       - name: Build website
