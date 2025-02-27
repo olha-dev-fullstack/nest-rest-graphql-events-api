@@ -13,7 +13,7 @@ on:
                 required: true
 jobs:
   checkout:
-    runs-on: "self-hosted,${{inputs.runner}}"
+    runs-on: [self-hosted, "${{inputs.runner}}"]
     environment: ${{inputs.environment}}
     steps:
       - name: Get code
@@ -29,7 +29,7 @@ jobs:
         run: npm ci
   create_env:
     needs: checkout
-    runs-on: "self-hosted,${{inputs.runner}}"
+    runs-on: [self-hosted, "${{inputs.runner}}"]
     environment: ${{inputs.environment}}
     steps: 
       - name: Create .env file
@@ -44,21 +44,21 @@ jobs:
           echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> ${{inputs.env_file}}
           echo "PORT=${{ secrets.PORT }}" >> ${{inputs.env_file}}
   test: 
-    runs-on: "self-hosted,${{inputs.runner}}"
+    runs-on: [self-hosted, "${{inputs.runner}}"]
     needs: create_env
     steps:
       - name: Run tests
         run: npm run test
   build:
     needs: [create_env, test]
-    runs-on: "self-hosted,${{inputs.runner}}"
+    runs-on: [self-hosted, "${{inputs.runner}}"]
     steps:
       - name: Build website
         id: build-website
         run: npm run build
   deploy:
     needs: build
-    runs-on: "self-hosted,${{inputs.runner}}"
+    runs-on: [self-hosted, "${{inputs.runner}}"]
     steps:
       - name: Run deployment
         run: NODE_ENV=${{inputs.environment}} pm2 restart dist/main.js --name=events-api
