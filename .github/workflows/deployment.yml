@@ -1,0 +1,64 @@
+name: Deployment flow
+on: 
+    workflow_call:
+        inputs:
+            environment:
+                type: string
+                required: true
+            runner:
+                type: string
+                required: true
+            env_file:
+                type: string
+                required: true
+jobs:
+  checkout:
+    runs-on: "self-hosted,${{inputs.runner}}"
+    environment: ${{inputs.environment}}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+  create_env:
+    needs: checkout
+    runs-on: "self-hosted,${{inputs.runner}}"
+    environment: ${{inputs.environment}}
+    steps: 
+      - name: Create .env file
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> ${{inputs.env_file}}
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> ${{inputs.env_file}}
+          echo "DB_USER=${{ secrets.DB_USER }}" >> ${{inputs.env_file}}
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ${{inputs.env_file}}
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> ${{inputs.env_file}}
+          echo "DB_DROP_SCHEMA=${{ secrets.DB_DROP_SCHEMA }}" >> ${{inputs.env_file}}
+          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> ${{inputs.env_file}}
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> ${{inputs.env_file}}
+          echo "PORT=${{ secrets.PORT }}" >> ${{inputs.env_file}}
+  test: 
+    runs-on: "self-hosted,${{inputs.runner}}"
+    needs: create_env
+    steps:
+      - name: Run tests
+        run: npm run test
+  build:
+    needs: [create_env, test]
+    runs-on: "self-hosted,${{inputs.runner}}"
+    steps:
+      - name: Build website
+        id: build-website
+        run: npm run build
+  deploy:
+    needs: build
+    runs-on: "self-hosted,${{inputs.runner}}"
+    steps:
+      - name: Run deployment
+        run: NODE_ENV=${{inputs.environment}} pm2 restart dist/main.js --name=events-api
