@@ -4,7 +4,7 @@ on:
 jobs:
   checkout:
     runs-on: [self-hosted, prod]
-    environment: dev
+    environment: production
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
   create_env:
     needs: checkout
     runs-on: [self-hosted, prod]
-    environment: dev
+    environment: production
     steps: 
       - name: Create .env file
         run: |
@@ -50,4 +50,4 @@ jobs:
     runs-on: [self-hosted, prod]
     steps:
       - name: Run deployment
-        run: NODE_ENV=dev pm2 restart dist/main.js --name=events-api
+        run: NODE_ENV=production pm2 restart dist/main.js --name=events-api
