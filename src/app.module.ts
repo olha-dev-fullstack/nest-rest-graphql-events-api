@@ -47,7 +47,7 @@ import { SchoolModule } from './school/school.module';
     },
     {
       provide: 'APP_NAME',
-      useValue: 'The best Nest events backend',
+      useValue: 'The Nest events application backend',
     },
     {
       provide: 'MESSAGE',
